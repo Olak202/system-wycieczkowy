@@ -85,7 +85,38 @@ def usun_klienta():
             str(e)
         )
 
+def aktualizuj_klienta():
+    try:
+        conn = sqlite3.connect("../database/wycieczki.db")
+        cursor = conn.cursor()
 
+        cursor.execute("""
+        UPDATE klienci
+        SET imie = ?, nazwisko = ?
+        WHERE id = ?
+        """, (
+            nowe_imie_entry.get(),
+            nowe_nazwisko_entry.get(),
+            int(update_id_entry.get())
+        ))
+
+        conn.commit()
+        conn.close()
+
+        messagebox.showinfo(
+            "Sukces",
+            "Klient został zaktualizowany"
+        )
+
+        update_id_entry.delete(0, tk.END)
+        nowe_imie_entry.delete(0, tk.END)
+        nowe_nazwisko_entry.delete(0, tk.END)
+
+    except Exception as e:
+        messagebox.showerror(
+            "Błąd",
+            str(e)
+        )
 root = tk.Tk()
 root.title("Zarządzanie klientami")
 root.geometry("400x500")
@@ -128,5 +159,24 @@ tk.Button(
     text="Usuń klienta",
     command=usun_klienta
 ).pack(pady=10)
+tk.Label(root, text="ID klienta do aktualizacji").pack(pady=5)
 
+update_id_entry = tk.Entry(root)
+update_id_entry.pack()
+
+tk.Label(root, text="Nowe imię").pack(pady=5)
+
+nowe_imie_entry = tk.Entry(root)
+nowe_imie_entry.pack()
+
+tk.Label(root, text="Nowe nazwisko").pack(pady=5)
+
+nowe_nazwisko_entry = tk.Entry(root)
+nowe_nazwisko_entry.pack()
+
+tk.Button(
+    root,
+    text="Aktualizuj klienta",
+    command=aktualizuj_klienta
+).pack(pady=10)
 root.mainloop()
