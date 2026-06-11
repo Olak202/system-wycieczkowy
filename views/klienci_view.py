@@ -36,6 +36,8 @@ def dodaj_klienta():
             "Błąd",
             str(e)
         )
+
+
 def pokaz_klientow():
     conn = sqlite3.connect("../database/wycieczki.db")
     cursor = conn.cursor()
@@ -57,9 +59,36 @@ def pokaz_klientow():
     )
 
 
+def usun_klienta():
+    try:
+        conn = sqlite3.connect("../database/wycieczki.db")
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "DELETE FROM klienci WHERE id = ?",
+            (int(id_entry.get()),)
+        )
+
+        conn.commit()
+        conn.close()
+
+        messagebox.showinfo(
+            "Sukces",
+            "Klient został usunięty"
+        )
+
+        id_entry.delete(0, tk.END)
+
+    except Exception as e:
+        messagebox.showerror(
+            "Błąd",
+            str(e)
+        )
+
+
 root = tk.Tk()
-root.title("Dodawanie klienta")
-root.geometry("400x350")
+root.title("Zarządzanie klientami")
+root.geometry("400x500")
 
 tk.Label(root, text="Imię").pack(pady=5)
 imie_entry = tk.Entry(root)
@@ -81,12 +110,23 @@ tk.Button(
     root,
     text="Dodaj klienta",
     command=dodaj_klienta
-).pack(pady=20)
+).pack(pady=10)
 
 tk.Button(
     root,
     text="Pokaż klientów",
     command=pokaz_klientow
-).pack()
+).pack(pady=10)
+
+tk.Label(root, text="ID klienta do usunięcia").pack(pady=5)
+
+id_entry = tk.Entry(root)
+id_entry.pack()
+
+tk.Button(
+    root,
+    text="Usuń klienta",
+    command=usun_klienta
+).pack(pady=10)
 
 root.mainloop()
