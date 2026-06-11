@@ -1,0 +1,67 @@
+import tkinter as tk
+from tkinter import messagebox
+import sqlite3
+
+
+def dodaj_klienta():
+    try:
+        conn = sqlite3.connect("../database/wycieczki.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        INSERT INTO klienci(imie, nazwisko, x, y)
+        VALUES (?, ?, ?, ?)
+        """, (
+            imie_entry.get(),
+            nazwisko_entry.get(),
+            float(x_entry.get()),
+            float(y_entry.get())
+        ))
+
+        conn.commit()
+        conn.close()
+
+        messagebox.showinfo(
+            "Sukces",
+            "Klient został dodany"
+        )
+
+        imie_entry.delete(0, tk.END)
+        nazwisko_entry.delete(0, tk.END)
+        x_entry.delete(0, tk.END)
+        y_entry.delete(0, tk.END)
+
+    except Exception as e:
+        messagebox.showerror(
+            "Błąd",
+            str(e)
+        )
+
+
+root = tk.Tk()
+root.title("Dodawanie klienta")
+root.geometry("400x350")
+
+tk.Label(root, text="Imię").pack(pady=5)
+imie_entry = tk.Entry(root)
+imie_entry.pack()
+
+tk.Label(root, text="Nazwisko").pack(pady=5)
+nazwisko_entry = tk.Entry(root)
+nazwisko_entry.pack()
+
+tk.Label(root, text="X").pack(pady=5)
+x_entry = tk.Entry(root)
+x_entry.pack()
+
+tk.Label(root, text="Y").pack(pady=5)
+y_entry = tk.Entry(root)
+y_entry.pack()
+
+tk.Button(
+    root,
+    text="Dodaj klienta",
+    command=dodaj_klienta
+).pack(pady=20)
+
+root.mainloop()
