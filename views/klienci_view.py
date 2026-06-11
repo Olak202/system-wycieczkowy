@@ -36,6 +36,25 @@ def dodaj_klienta():
             "Błąd",
             str(e)
         )
+def pokaz_klientow():
+    conn = sqlite3.connect("../database/wycieczki.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM klienci")
+
+    dane = cursor.fetchall()
+
+    conn.close()
+
+    wynik = ""
+
+    for klient in dane:
+        wynik += f"{klient}\n"
+
+    messagebox.showinfo(
+        "Lista klientów",
+        wynik if wynik else "Brak klientów"
+    )
 
 
 root = tk.Tk()
@@ -63,5 +82,11 @@ tk.Button(
     text="Dodaj klienta",
     command=dodaj_klienta
 ).pack(pady=20)
+
+tk.Button(
+    root,
+    text="Pokaż klientów",
+    command=pokaz_klientow
+).pack()
 
 root.mainloop()
