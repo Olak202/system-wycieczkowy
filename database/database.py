@@ -22,7 +22,15 @@ CREATE TABLE IF NOT EXISTS biura (
     y REAL
 )
 """)
-
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS przewodnicy (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    imie TEXT NOT NULL,
+    nazwisko TEXT NOT NULL,
+    x REAL,
+    y REAL
+)
+""")
 conn.commit()
 conn.close()
 
