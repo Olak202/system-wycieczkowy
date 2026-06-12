@@ -1,11 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "database", "wycieczki.db")
 
 
 def dodaj_przewodnika():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -32,18 +36,14 @@ def dodaj_przewodnika():
         y_entry.delete(0, tk.END)
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 def pokaz_przewodnikow():
-    conn = sqlite3.connect("../database/wycieczki.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM przewodnicy")
-
     dane = cursor.fetchall()
 
     conn.close()
@@ -61,7 +61,7 @@ def pokaz_przewodnikow():
 
 def usun_przewodnika():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
@@ -80,15 +80,12 @@ def usun_przewodnika():
         id_entry.delete(0, tk.END)
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 def aktualizuj_przewodnika():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -109,15 +106,8 @@ def aktualizuj_przewodnika():
             "Przewodnik został zaktualizowany"
         )
 
-        update_id_entry.delete(0, tk.END)
-        nowe_imie_entry.delete(0, tk.END)
-        nowe_nazwisko_entry.delete(0, tk.END)
-
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 root = tk.Tk()

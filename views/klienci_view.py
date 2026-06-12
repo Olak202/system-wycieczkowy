@@ -1,11 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "database", "wycieczki.db")
 
 
 def dodaj_klienta():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -21,10 +25,7 @@ def dodaj_klienta():
         conn.commit()
         conn.close()
 
-        messagebox.showinfo(
-            "Sukces",
-            "Klient został dodany"
-        )
+        messagebox.showinfo("Sukces", "Klient został dodany")
 
         imie_entry.delete(0, tk.END)
         nazwisko_entry.delete(0, tk.END)
@@ -32,18 +33,14 @@ def dodaj_klienta():
         y_entry.delete(0, tk.END)
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 def pokaz_klientow():
-    conn = sqlite3.connect("../database/wycieczki.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM klienci")
-
     dane = cursor.fetchall()
 
     conn.close()
@@ -61,7 +58,7 @@ def pokaz_klientow():
 
 def usun_klienta():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
@@ -80,14 +77,12 @@ def usun_klienta():
         id_entry.delete(0, tk.END)
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
+
 
 def aktualizuj_klienta():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -108,15 +103,10 @@ def aktualizuj_klienta():
             "Klient został zaktualizowany"
         )
 
-        update_id_entry.delete(0, tk.END)
-        nowe_imie_entry.delete(0, tk.END)
-        nowe_nazwisko_entry.delete(0, tk.END)
-
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
+
+
 root = tk.Tk()
 root.title("Zarządzanie klientami")
 root.geometry("400x500")
@@ -137,40 +127,24 @@ tk.Label(root, text="Y").pack(pady=5)
 y_entry = tk.Entry(root)
 y_entry.pack()
 
-tk.Button(
-    root,
-    text="Dodaj klienta",
-    command=dodaj_klienta
-).pack(pady=10)
-
-tk.Button(
-    root,
-    text="Pokaż klientów",
-    command=pokaz_klientow
-).pack(pady=10)
+tk.Button(root, text="Dodaj klienta", command=dodaj_klienta).pack(pady=10)
+tk.Button(root, text="Pokaż klientów", command=pokaz_klientow).pack(pady=10)
 
 tk.Label(root, text="ID klienta do usunięcia").pack(pady=5)
-
 id_entry = tk.Entry(root)
 id_entry.pack()
 
-tk.Button(
-    root,
-    text="Usuń klienta",
-    command=usun_klienta
-).pack(pady=10)
-tk.Label(root, text="ID klienta do aktualizacji").pack(pady=5)
+tk.Button(root, text="Usuń klienta", command=usun_klienta).pack(pady=10)
 
+tk.Label(root, text="ID klienta do aktualizacji").pack(pady=5)
 update_id_entry = tk.Entry(root)
 update_id_entry.pack()
 
 tk.Label(root, text="Nowe imię").pack(pady=5)
-
 nowe_imie_entry = tk.Entry(root)
 nowe_imie_entry.pack()
 
 tk.Label(root, text="Nowe nazwisko").pack(pady=5)
-
 nowe_nazwisko_entry = tk.Entry(root)
 nowe_nazwisko_entry.pack()
 
@@ -179,4 +153,5 @@ tk.Button(
     text="Aktualizuj klienta",
     command=aktualizuj_klienta
 ).pack(pady=10)
+
 root.mainloop()

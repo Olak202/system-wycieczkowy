@@ -1,11 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "database", "wycieczki.db")
 
 
 def dodaj_biuro():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -27,18 +31,14 @@ def dodaj_biuro():
         )
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 def pokaz_biura():
-    conn = sqlite3.connect("../database/wycieczki.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM biura")
-
     dane = cursor.fetchall()
 
     conn.close()
@@ -56,7 +56,7 @@ def pokaz_biura():
 
 def usun_biuro():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute(
@@ -73,15 +73,12 @@ def usun_biuro():
         )
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 def aktualizuj_biuro():
     try:
-        conn = sqlite3.connect("../database/wycieczki.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         cursor.execute("""
@@ -103,10 +100,7 @@ def aktualizuj_biuro():
         )
 
     except Exception as e:
-        messagebox.showerror(
-            "Błąd",
-            str(e)
-        )
+        messagebox.showerror("Błąd", str(e))
 
 
 root = tk.Tk()
@@ -129,27 +123,14 @@ tk.Label(root, text="Y").pack()
 y_entry = tk.Entry(root)
 y_entry.pack()
 
-tk.Button(
-    root,
-    text="Dodaj biuro",
-    command=dodaj_biuro
-).pack(pady=10)
-
-tk.Button(
-    root,
-    text="Pokaż biura",
-    command=pokaz_biura
-).pack(pady=10)
+tk.Button(root, text="Dodaj biuro", command=dodaj_biuro).pack(pady=10)
+tk.Button(root, text="Pokaż biura", command=pokaz_biura).pack(pady=10)
 
 tk.Label(root, text="ID biura do usunięcia").pack()
 id_entry = tk.Entry(root)
 id_entry.pack()
 
-tk.Button(
-    root,
-    text="Usuń biuro",
-    command=usun_biuro
-).pack(pady=10)
+tk.Button(root, text="Usuń biuro", command=usun_biuro).pack(pady=10)
 
 tk.Label(root, text="ID biura do aktualizacji").pack()
 update_id_entry = tk.Entry(root)

@@ -1,6 +1,10 @@
 import tkinter as tk
 from tkintermapview import TkinterMapView
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "database", "wycieczki.db")
 
 root = tk.Tk()
 root.title("Mapa wycieczek")
@@ -12,7 +16,7 @@ map_widget.pack(fill="both", expand=True)
 map_widget.set_position(52.069, 19.480)
 map_widget.set_zoom(6)
 
-conn = sqlite3.connect("../database/wycieczki.db")
+conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
 # Klienci
